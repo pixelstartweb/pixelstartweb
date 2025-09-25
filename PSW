@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Clean Portfolio — Leon</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0f1724;
+      --bg-2: #071226; /* secondary background stop */
+      --card: #0b1220;
+      --muted: #94a3b8;
+      --text: #e6eef6;
+      --accent: #6ee7b7; /* mint green */
+      --glass: rgba(255,255,255,0.03);
+      --radius: 14px;
+      --max-width: 1100px;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      color-scheme: black;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: linear-gradient(180deg,var(--bg) 0%, var(--bg-2) 100%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      padding:32px 20px;
+      display:flex;
+      justify-content:center;
+      transition:background 240ms ease,color 240ms ease;
+    }
+    .wrap{width:100%;max-width:var(--max-width)}
+
+    /* screen-reader only helper */
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    /* NAV */
+    .nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#60a5fa);display:flex;align-items:center;justify-content:center;font-weight:700;color:#042027}
+    .site-title{font-weight:700}
+    nav ul{display:flex;gap:18px;list-style:none;margin:0;padding:0}
+    nav a{color:var(--muted);text-decoration:none;font-weight:600}
+    nav a:hover, nav a:focus{color:var(--accent);outline-offset:3px}
+    .cta{background:linear-gradient(90deg,var(--accent),#60a5fa);padding:8px 14px;border-radius:10px;color:#042027;font-weight:700;text-decoration:none}
+
+    /* theme toggle */
+    .controls{display:flex;gap:12px;align-items:center}
+    .theme-toggle{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:6px 10px;border-radius:10px;color:var(--muted);cursor:pointer}
+
+    /* mobile nav */
+    .mobile-toggle{display:none;background:transparent;border:0;color:var(--muted);font-size:20px}
+
+    /* HERO */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center}
+    .panel{background:var(--glass);padding:28px;border-radius:var(--radius);backdrop-filter:blur(6px);box-shadow:0 4px 30px rgba(2,6,23,0.6);transition:background 240ms ease}
+    .hero h1{margin:0 0 8px;font-size:28px}
+    .lead{color:var(--muted);margin:0 0 18px}
+    .actions{display:flex;gap:12px}
+
+    .profile-card{display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center}
+    .avatar{width:140px;height:140px;border-radius:18px;background:linear-gradient(135deg,#0ea5a9,#60a5fa);display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:700;color:#042027}
+    .tag{background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:999px;color:var(--muted);font-weight:600}
+
+    /* SECTIONS */
+    section{margin-top:28px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:18px;border-radius:12px}
+    .card h3{margin:0 0 8px}
+    .muted{color:var(--muted);font-size:14px}
+
+    /* PORTFOLIO - now uses <img> with srcset for better performance + accessibility */
+    .work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .work-item{position:relative;height:160px;border-radius:10px;display:flex;align-items:flex-end;padding:12px;overflow:hidden}
+    .work-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background-position:center}
+    .work-item::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15),rgba(0,0,0,0.45));z-index:1}
+    .work-item .meta{position:relative;z-index:2;color:var(--text)}
+    .work-item p{margin:0;font-weight:700}
+
+    /* hover + focus polish */
+    .work-item{transition:transform 220ms cubic-bezier(.2,.9,.3,1),box-shadow 220ms}
+    .work-item:focus-within,.work-item:focus{outline:3px solid rgba(110,231,183,0.12);outline-offset:4px}
+    .work-item:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+
+    /* CONTACT */
+    form{display:grid;gap:12px}
+    input,textarea{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px;border-radius:8px;color:inherit}
+    input::placeholder,textarea::placeholder{color:var(--muted)}
+    .btn{padding:10px 14px;border-radius:10px;border:0;font-weight:700;cursor:pointer;background:linear-gradient(90deg,var(--accent),#60a5fa);color:#042027}
+
+    footer{margin-top:28px;opacity:0.8;font-size:13px;color:var(--muted)}
+
+    /* Responsive tweaks */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr}
+      .work-grid,.grid-3{grid-template-columns:repeat(2,1fr)}
+      .profile-card{flex-direction:row;gap:16px;text-align:left}
+    }
+    /* reduce work item height on small screens for better fit */
+    @media (max-width:600px){
+      .nav nav{display:none}
+      .mobile-toggle{display:block}
+      .hero{gap:18px}
+      .work-grid,.grid-3{grid-template-columns:1fr}
+      .work-item{height:120px}
+      /* ensure background-attachment is not fixed on mobile (performance) */
+      .work-item img{background-attachment:scroll}
+    }
+
+    /* focus styles for keyboard users */
+    a:focus, button:focus, input:focus, textarea:focus{outline:3px solid rgba(110,231,183,0.12);outline-offset:3px}
+
+    .paypal-link {
+        display: inline-block;
+        font-family: inherit;
+        background-color: #ffc439;
+        color: #5eb1ff;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 12px;
+        text-decoration: none;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        transition: background-color 180ms ease, transform 180ms ease;
+        position: relative;
+        overflow: hidden;
+        margin-left: 50px;
+        block-size: 1.39cm;
+    }
+
+    .paypal-link:hover {
+        background-color: #ffcb6b;
+        transform: translateY(-2px);
+    }
+
+    .paypal-link:active {
+        transform: translateY(0);
+    }
+
+    .paypal-link::before {
+        content: icon;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-weight: 900;
+        margin-right: 12px;
+    }
+
+    .paypal-link .label {
+        margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="nav" role="banner">
+      <div class="brand">
+        <div class="logo" aria-hidden>PSW</div>
+        <div>
+          <div class="site-title">PixelStart Web</div>
+          <div class="muted" style="font-size:13px">Designer • Developer • Founder</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <nav aria-label="Primary navigation">
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#work">Work</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <!-- mailto kept as direct CTA; it's acceptable to keep it so users can click-to-email; external links should include rel attributes when target is _blank -->
+            <li><a class="cta" href="mailto:m.kragen123@gmail.com">Hire me</a></li>
+          </ul>
+        </nav>
+
+        <!-- theme toggle (accessible) -->
+        <button id="themeToggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle color theme" type="button">🌙</button>
+
+        <!-- mobile nav toggle: aria-label added for accessibility -->
+        <button class="mobile-toggle" aria-controls="mobile-menu" aria-expanded="false" aria-label="Toggle navigation menu">☰</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="panel">
+          <h1>Design & Build — turn ideas into products</h1>
+          <p class="lead">Hi — I'm Leon. I create fast, accessible websites and memorable brand experiences that help small businesses win customers and save time.</p>
+          <div class="actions">
+            <a class="btn" href="#work">View work</a>
+            <a href="#contact" style="align-self:center;color:var(--muted);text-decoration:none">Get a quote →</a>
+          </div>
+          <ul style="display:flex;gap:8px;margin-top:16px;padding:0;list-style:none">
+            <li class="tag">Fast &amp; accessible</li>
+            <li class="tag">Performance-first</li>
+            <li class="tag">Clear branding</li>
+          </ul>
+          <div style="margin-top:18px" class="muted">Available for freelance — open to remote opportunities</div>
+        </div>
+
+        <aside class="profile-card panel" aria-label="Profile card">
+          <div class="avatar" aria-hidden>PSW</div>
+          <div>
+            <div style="font-weight:700">Leon</div>
+            <div class="muted">Full-stack Dev</div>
+            <div style="margin-top:10px">
+              <span class="tag">Open to work</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="about">
+        <div class="card">
+          <h3>How I work</h3>
+          <p class="muted">I combine product thinking with practical engineering — designs that solve real problems and are built to last. Typical project rhythm:</p>
+          <ol class="muted" style="padding-left:18px;margin-top:8px">
+            <li><strong>Discover</strong> — goals, users, constraints.</li>
+            <li><strong>Design</strong> — wireframes, accessibility-first UI, and visual identity.</li>
+            <li><strong>Deliver</strong> — fast builds, testing, deployment and handoff.</li>
+          </ol>
+      </section>
+
+      <section id="services" style="margin-top:18px">
+        <div class="grid-3">
+          <div class="card">
+            <h3>Design Systems</h3>
+            <p class="muted">Reusable UI, design tokens, and documentation to keep your product consistent.</p>
+          </div>
+          <div class="card">
+            <h3>Web Development</h3>
+            <p class="muted">Responsive, semantic HTML and performant CSS with progressive enhancement.</p>
+          </div>
+          <div class="card">
+            <h3>Brand Strategy</h3>
+            <p class="muted">Naming, messaging and visual identity that connects with your audience.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="work">
+        <h2 style="margin:12px 0">Selected Work</h2>
+        <div class="work-grid">
+          <!-- Each work item now uses an <img> with srcset for responsive image loading and an accessible alt -->
+          <figure class="work-item" tabindex="0" role="group" aria-label="Project Alpha — Branding and web">
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=60" 
+                 srcset="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=400&q=60 400w, https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=60 800w"
+                 sizes="(max-width:600px)100vw,(max-width:980px)50vw,33vw"
+                 alt="Workspace with code editor and notes — Project Alpha screenshot">
+            <figcaption class="meta">
+              <p>Project Alpha</p>
+              <div class="muted">Branding / Web</div>
+            </figcaption>
+          </figure>
+
+          <figure class="work-item" tabindex="0" role="group" aria-label="Inventory App — Product and app">
+            <img src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=600&q=60"
+                 srcset="https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=400&q=60 400w, https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=800&q=60 800w"
+                 sizes="(max-width:600px)100vw,(max-width:980px)50vw,33vw"
+                 alt="Person using inventory app on tablet — Inventory App screenshot">
+            <figcaption class="meta">
+              <p>Inventory App</p>
+              <div class="muted">Product / App</div>
+            </figcaption>
+          </figure>
+
+          <figure class="work-item" tabindex="0" role="group" aria-label="Landing Page — Marketing site">
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=60" 
+                 srcset="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=400&q=60 400w, https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=60 800w"
+                 sizes="(max-width:600px)100vw,(max-width:980px)50vw,33vw"
+                 alt="Abstract marketing illustration — Landing page screenshot">
+            <figcaption class="meta">
+              <p>Landing Page</p>
+              <div class="muted">Marketing Site</div>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="contact">
+        <h2 style="margin:12px 0">Contact</h2>
+        <div class="card">
+          <!-- Formspree example: replace `yourFormId` with your form ID from Formspree (it's free for basic usage).
+               We POST directly so users don't need to rely on their mail client. -->
+          <form id="contactForm" action="https://formspree.io/f/yourFormId" method="POST">
+            <label class="muted" for="name">Name</label>
+            <input id="name" name="name" placeholder="Franklyn Mark" required>
+
+            <label class="muted" for="email">Email</label>
+            <input id="email" name="_replyto" placeholder="you@company.com" type="email" required>
+
+            <label class="muted" for="message">Message</label>
+            <textarea id="message" name="message" rows="4" placeholder="Project details or a quick hello" required></textarea>
+
+            <!-- optional: subject for your inbox -->
+            <input type="hidden" name="_subject" value="New inquiry from Barecode Web site">
+
+            <button class="btn" type="submit">Send message</button>
+          </form>
+        </div>
+      </section>
+
+      <footer>
+        <div class="muted">© <span id="year"></span> PixelStar Web | Leon</div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // set year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // mobile nav toggle (accessible)
+    (function(){
+      const toggle = document.querySelector('.mobile-toggle');
+      toggle?.addEventListener('click', ()=>{
+        const nav = document.querySelector('nav');
+        const expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!expanded));
+        if(!expanded){
+          nav.style.display = 'block';
+        } else {
+          nav.style.display = '';
+        }
+      });
+    })();
+
+    // Optional: client-side enhancement for Formspree to show a quick success message without leaving page
+    (function(){
+      const form = document.getElementById('contactForm');
+      if(!form) return;
+      form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const data = new FormData(form);
+        try{
+          const resp = await fetch(form.action, {method:'POST', body:data, headers: {'Accept':'application/json'}});
+          if(resp.ok){
+            form.reset();
+            alert('Thanks — your message was sent. I will get back to you shortly.');
+          } else {
+            const json = await resp.json().catch(()=>null);
+            if(json && json.errors){
+              alert(json.errors.map(err => err.message).join('
+'));
+            } else {
+              // fallback: submit the form normally
+              form.submit();
+            }
+          }
+        }catch(err){
+          // network or CORS, fallback to native submit
+          form.submit();
+        }
+      });
+    })();
+  </script>
+  <!-- In your code, dynamically update
+data-pp-amount with the price or cart amount.
+For example, data-pp-amount=“89.99”
+for $89.99 product
+-->
+<div
+    data-pp-message
+    data-pp-style-layout="text"
+    data-pp-style-logo-type="inline"
+    data-pp-style-text-color="black"
+    data-pp-amount="ENTER_VALUE_HERE">
+</div>
+<a href="https://www.paypal.com/ncp/payment/VWERAXETHZA4U" class="paypal-link">
+    <span class="label">Pay With PayPal</span>
+</a>
+</body>
+</html>
